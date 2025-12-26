@@ -1,15 +1,15 @@
 backend:
   name: git-gateway
-  branch: main
+  branch: principal # Manteve-se 'principal' porque é o nome do teu branch no GitHub
 
-media_folder: "images/uploads"
-public_folder: "/images/uploads"
+media_folder: "imagens/envios"
+public_folder: "/imagens/uploads"
 
 collections:
   - name: "site"
     label: "Site"
     files:
-      - name: "home"
+      - name: "lar"
         label: "Página Inicial"
         file: "conteudo/home.json"
         fields:
