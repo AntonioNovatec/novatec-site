@@ -1,99 +1,104 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Novatec PC Solution</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        html { scroll-behavior: smooth; }
-        body { background-color: #0b0f1a; color: #ffffff; }
-        .nav-link:hover { color: #3b82f6; transition: 0.3s; }
-        .service-card { background: #161e2d; border: 1px solid #232d3f; border-radius: 15px; padding: 25px; }
-        .btn-blue { background-color: #2563eb; color: white; padding: 10px 20px; border-radius: 8px; font-weight: bold; }
-        .btn-blue:hover { background-color: #1d4ed8; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Novatec PC Solution</title>
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  document.getElementById("preco-limpeza").textContent = "35€";
-  document.getElementById("preco-formatacao").textContent = "45€";
-  document.getElementById("preco-teclado").textContent = "Sob Consulta";
-});
-</script>
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    body { background-color: #0b0f1a; color: #ffffff; }
+    .card { background: #161e2d; border-radius: 12px; padding: 20px; }
+    .price { color: #3b82f6; font-weight: bold; }
+  </style>
 </head>
+
 <body>
 
-    <nav class="fixed top-0 w-full bg-[#0b0f1a]/90 backdrop-blur-md z-50 border-b border-gray-800">
-        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-            <span class="text-xl font-bold tracking-tighter">NOVATEC <span class="text-blue-500">PC SOLUTION</span></span>
-            <div class="hidden md:flex space-x-8 text-sm font-medium">
-                <a href="#home" class="nav-link">Início</a>
-                <a href="#servicos" class="nav-link">Serviços</a>
-                <a href="#precos" class="nav-link">Preços</a>
-                <a href="https://wa.me/351912345678" target="_blank" class="btn-blue">Contacto</a>
-            </div>
-        </div>
-    </nav>
+<!-- NAV -->
+<nav class="fixed top-0 w-full bg-[#0b0f1a]/90 backdrop-blur border-b border-gray-800 z-50">
+  <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+    <span class="font-bold text-xl">NOVATEC <span class="text-blue-500">PC SOLUTION</span></span>
+    <div class="space-x-6 hidden md:block">
+      <a href="#home">Início</a>
+      <a href="#servicos">Serviços</a>
+      <a href="#precos">Preços</a>
+      <a href="https://wa.me/351912345678" target="_blank" class="bg-blue-600 px-4 py-2 rounded">Contacto</a>
+    </div>
+  </div>
+</nav>
 
-    <section id="home" class="pt-32 pb-20 px-6 text-center">
-        <h1 class="text-5xl md:text-7xl font-black mb-6">Reparação Profissional de <span class="text-blue-500">Computadores</span></h1>
-        <p class="text-gray-400 text-lg max-w-2xl mx-auto mb-10">Assistência técnica rápida e garantida. Resolvemos o seu problema de hardware ou software no próprio dia.</p>
-        <div class="flex justify-center gap-4">
-            <a href="#precos" class="btn-blue text-lg px-8 py-4">Ver Preçário</a>
-            <a href="#servicos" class="border border-gray-600 px-8 py-4 rounded-lg hover:bg-gray-800">Nossos Serviços</a>
-        </div>
-    </section>
+<!-- HERO -->
+<section id="home" class="pt-32 pb-20 text-center">
+  <h1 class="text-5xl font-black mb-6">
+    Reparação Profissional de <span class="text-blue-500">Computadores</span>
+  </h1>
+  <p class="text-gray-400 max-w-2xl mx-auto mb-8">
+    Assistência técnica rápida e garantida. Hardware e software no próprio dia.
+  </p>
+  <a href="#precos" class="bg-blue-600 px-6 py-3 rounded font-bold">Ver Preços</a>
+</section>
 
-    <section id="servicos" class="py-20 max-w-6xl mx-auto px-6">
-        <h2 class="text-3xl font-bold mb-12 text-center">Serviços Especializados</h2>
-        <div class="grid md:grid-cols-3 gap-8">
-            <div class="service-card text-center">
-                <i class="fas fa-tools text-blue-500 text-3xl mb-4"></i>
-                <h3 class="text-xl font-bold mb-2">Hardware</h3>
-                <p class="text-gray-400 text-sm">Substituição de componentes, ecrãs e baterias.</p>
-            </div>
-            <div class="service-card text-center">
-                <i class="fas fa-wind text-blue-500 text-3xl mb-4"></i>
-                <h3 class="text-xl font-bold mb-2">Manutenção</h3>
-                <p class="text-gray-400 text-sm">Limpeza completa e troca de massa térmica.</p>
-            </div>
-            <div class="service-card text-center">
-                <i class="fas fa-code text-blue-500 text-3xl mb-4"></i>
-                <h3 class="text-xl font-bold mb-2">Software</h3>
-                <p class="text-gray-400 text-sm">Instalação de Sistemas e remoção de vírus.</p>
-            </div>
-        </div>
-    </section>
+<!-- SERVIÇOS -->
+<section id="servicos" class="py-20 max-w-6xl mx-auto px-6">
+  <h2 class="text-3xl font-bold text-center mb-12">Serviços Especializados</h2>
 
-    <section id="precos" class="py-20 bg-[#0d1321]">
-        <div class="max-w-4xl mx-auto px-6">
-            <h2 class="text-3xl font-bold mb-12 text-center">Preçário Transparente</h2>
-            <div class="space-y-4">
-                <div class="flex justify-between p-4 bg-[#161e2d] rounded-lg border border-gray-800">
-                    <span>Limpeza e Manutenção</span>
-                    <span id="preco-limpeza" class="text-blue-500 font-bold"></span>
+  <div class="grid md:grid-cols-3 gap-8">
+    <div class="card text-center">
+      <i class="fa-solid fa-screwdriver-wrench text-blue-500 text-3xl mb-4"></i>
+      <h3 class="text-xl font-bold mb-2">Hardware</h3>
+      <p class="text-gray-400">Substituição de componentes, ecrãs e baterias.</p>
+    </div>
 
-                </div>
-                <div class="flex justify-between p-4 bg-[#161e2d] rounded-lg border border-gray-800">
-                    <span>Formatação + Backup</span>
-                    <span id="preco-formatacao" class="text-blue-500 font-bold"></span>
+    <div class="card text-center">
+      <i class="fa-solid fa-wind text-blue-500 text-3xl mb-4"></i>
+      <h3 class="text-xl font-bold mb-2">Manutenção</h3>
+      <p class="text-gray-400">Limpeza interna e troca de massa térmica.</p>
+    </div>
 
-                </div>
-                <div class="flex justify-between p-4 bg-[#161e2d] rounded-lg border border-gray-800">
-                    <span>Substituição de Teclado</span>
-                    <span id="preco-teclado" class="text-blue-500 font-bold"></span>
+    <div class="card text-center">
+      <i class="fa-solid fa-code text-blue-500 text-3xl mb-4"></i>
+      <h3 class="text-xl font-bold mb-2">Software</h3>
+      <p class="text-gray-400">Instalação de sistemas e remoção de vírus.</p>
+    </div>
+  </div>
+</section>
 
-                </div>
-            </div>
-        </div>
-    </section>
+<!-- PREÇOS -->
+<section id="precos" class="py-20 bg-[#0d1321]">
+  <div class="max-w-xl mx-auto px-6">
+    <h2 class="text-3xl font-bold text-center mb-10">Preçário Transparente</h2>
 
-    <footer class="py-10 text-center border-t border-gray-800 text-gray-600">
-        <p>&copy; 2025 Novatec PC Solution</p>
-    </footer>
+    <div class="space-y-4">
+      <div class="flex justify-between card">
+        <span>Limpeza e Manutenção</span>
+        <span class="price">35€</span>
+      </div>
+
+      <div class="flex justify-between card">
+        <span>Formatação + Backup</span>
+        <span class="price">45€</span>
+      </div>
+
+      <div class="flex justify-between card">
+        <span>Substituição de Teclado</span>
+        <span class="price">Sob Consulta</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="py-10 text-center text-gray-500 border-t border-gray-800">
+  © 2025 Novatec PC Solution
+</footer>
 
 </body>
 </html>
+
+
