@@ -13,12 +13,14 @@
         .service-card { background: #161e2d; border: 1px solid #232d3f; border-radius: 15px; padding: 25px; }
         .btn-blue { background-color: #2563eb; color: white; padding: 10px 20px; border-radius: 8px; font-weight: bold; }
         .btn-blue:hover { background-color: #1d4ed8; }
-    </style> <script>
-  const PRECOS = {
-    limpeza: "35€",
-    formatacao: "45€",
-    teclado: "Sob Consulta"
-  };
+    </style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.getElementById("preco-limpeza").textContent = "35€";
+  document.getElementById("preco-formatacao").textContent = "45€";
+  document.getElementById("preco-teclado").textContent = "Sob Consulta";
+});
 </script>
 
 </head>
