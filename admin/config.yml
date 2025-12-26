@@ -1,0 +1,17 @@
+backend:
+  name: git-gateway
+  branch: principal
+
+media_folder: "imagens/envios"
+public_folder: "/imagens/uploads"
+
+collections:
+  - name: "site"
+    label: "Site"
+    files:
+      - name: "lar"
+        label: "Página Inicial"
+        file: "conteudo/home.json"
+        fields:
+          - { label: "Título", name: "titulo", widget: "string" }
+          - { label: "Subtítulo", name: "subtitulo", widget: "string" }
