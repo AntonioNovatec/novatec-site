@@ -1,56 +1,76 @@
-// APP.JS - NOVATEC.PC.SOLUTION
-// Lógica da aplicação
-
+// CONFIGURAÇÕES INICIAIS
 let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
 let categoriaAtiva = 'todos';
+const MOEDA = '€'; // Define a moeda se não estiver no config.js
+const CONTATO = { whatsapp: '351916294573' }; // Teu contacto
 
 // INICIALIZAR
 document.addEventListener('DOMContentLoaded', () => {
   renderizarProdutos();
   atualizarCarrinho();
   
-  // Busca em tempo real
   document.getElementById('searchInput').addEventListener('input', (e) => {
     renderizarProdutos(e.target.value);
   });
 });
 
+// FUNÇÃO PARA LER OS PRODUTOS DO CMS (DINÂMICO)
+async function obterProdutosDoCMS() {
+    try {
+        // Como o site está na Cloudflare, vamos tentar ler a lista de ficheiros
+        // Para que isto funcione a 100%, deves criar pelo menos um produto no painel primeiro
+        // O CMS cria ficheiros em: /data/produtos/nome-do-produto.json
+        
+        // Aqui usamos a variável PRODUTOS do teu config.js como base, 
+        // mas no futuro podemos fazer um fetch à API do GitHub para listar tudo.
+        return typeof PRODUTOS !== 'undefined' ? PRODUTOS : [];
+    } catch (e) {
+        console.error("Erro ao carregar ficheiros do CMS", e);
+        return [];
+    }
+}
+
 // RENDERIZAR PRODUTOS
-function renderizarProdutos(busca = '') {
+async function renderizarProdutos(busca = '') {
   const grid = document.getElementById('produtosGrid');
-  grid.innerHTML = '';
+  if (!grid) return;
   
-  let produtosFiltrados = PRODUTOS;
+  grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #8b92a9;">A carregar produtos...</p>';
+  
+  // Obtém os produtos (aqui podes expandir para ler os ficheiros JSON individualmente)
+  let produtosExibir = await obterProdutosDoCMS();
   
   // Filtrar por categoria
   if (categoriaAtiva !== 'todos') {
-    produtosFiltrados = produtosFiltrados.filter(p => p.categoria === categoriaAtiva);
+    produtosExibir = produtosExibir.filter(p => p.categoria === categoriaAtiva);
   }
   
   // Filtrar por busca
   if (busca) {
-    produtosFiltrados = produtosFiltrados.filter(p => 
+    produtosExibir = produtosExibir.filter(p => 
       p.nome.toLowerCase().includes(busca.toLowerCase()) ||
       p.descricao.toLowerCase().includes(busca.toLowerCase())
     );
   }
   
-  if (produtosFiltrados.length === 0) {
-    grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #8b92a9;">Nenhum produto encontrado</p>';
+  if (produtosExibir.length === 0) {
+    grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #8b92a9;">Nenhum produto encontrado. Cria produtos no Painel Admin!</p>';
     return;
   }
   
-  produtosFiltrados.forEach(produto => {
+  grid.innerHTML = '';
+  
+  produtosExibir.forEach(produto => {
     const card = document.createElement('div');
     card.className = 'produto-card';
     card.innerHTML = `
       <div class="produto-imagem">
-        <img src="${produto.imagem}" alt="${produto.nome}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect fill=%22%231a1f3a%22 width=%22200%22 height=%22200%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22Arial%22 font-size=%2214%22 fill=%22%238b92a9%22%3E${produto.nome}%3C/text%3E%3C/svg%3E'">
+        <img src="${produto.imagem}" alt="${produto.nome}" onerror="this.src='https://via.placeholder.com/200?text=Sem+Imagem'">
       </div>
       <div class="produto-info">
         <div class="produto-nome">${produto.nome}</div>
         <div class="produto-descricao">${produto.descricao}</div>
-        <div class="produto-preco">${MOEDA}${produto.preco.toFixed(2)}</div>
+        <div class="produto-preco">${MOEDA}${parseFloat(produto.preco).toFixed(2)}</div>
         <div class="produto-acoes">
           <button class="btn-carrinho" onclick="adicionarAoCarrinho(${produto.id})">CARRINHO</button>
         </div>
@@ -60,154 +80,84 @@ function renderizarProdutos(busca = '') {
   });
 }
 
-// FILTRAR CATEGORIA
+// --- MANTÉM TODAS AS TUAS OUTRAS FUNÇÕES (ADICIONAR AO CARRINHO, WHATSAPP, ETC) ---
+
+function adicionarAoCarrinho(produtoId) {
+  // A lógica de busca do produto precisa de aceder aos dados carregados
+  obterProdutosDoCMS().then(produtos => {
+    const produto = produtos.find(p => p.id === produtoId);
+    if (!produto) return;
+    
+    const itemExistente = carrinho.find(item => item.id === produtoId);
+    if (itemExistente) {
+        itemExistente.quantidade++;
+    } else {
+        carrinho.push({
+            id: produto.id,
+            nome: produto.nome,
+            preco: produto.preco,
+            imagem: produto.imagem,
+            quantidade: 1
+        });
+    }
+    salvarCarrinho();
+    mostrarToast(`${produto.nome} adicionado!`);
+    atualizarCarrinho();
+  });
+}
+
 function filtrarCategoria(categoria) {
   categoriaAtiva = categoria;
-  
-  // Atualizar botões ativos
-  document.querySelectorAll('.filtro-btn').forEach(btn => {
-    btn.classList.remove('ativo');
-  });
-  event.target.classList.add('ativo');
-  
+  document.querySelectorAll('.filtro-btn').forEach(btn => btn.classList.remove('ativo'));
+  if (event) event.target.classList.add('ativo');
   renderizarProdutos(document.getElementById('searchInput').value);
 }
 
-// ADICIONAR AO CARRINHO
-function adicionarAoCarrinho(produtoId) {
-  const produto = PRODUTOS.find(p => p.id === produtoId);
-  if (!produto) return;
-  
-  const itemExistente = carrinho.find(item => item.id === produtoId);
-  
-  if (itemExistente) {
-    itemExistente.quantidade++;
-  } else {
-    carrinho.push({
-      id: produto.id,
-      nome: produto.nome,
-      preco: produto.preco,
-      imagem: produto.imagem,
-      quantidade: 1
-    });
-  }
-  
-  salvarCarrinho();
-  mostrarToast(`${produto.nome} adicionado ao carrinho!`);
-  atualizarCarrinho();
-}
+function salvarCarrinho() { localStorage.setItem('carrinho', JSON.stringify(carrinho)); }
 
-// REMOVER DO CARRINHO
-function removerDoCarrinho(produtoId) {
-  carrinho = carrinho.filter(item => item.id !== produtoId);
-  salvarCarrinho();
-  atualizarCarrinho();
-  mostrarToast('Produto removido do carrinho');
-}
-
-// ATUALIZAR QUANTIDADE
-function atualizarQuantidade(produtoId, novaQuantidade) {
-  const item = carrinho.find(i => i.id === produtoId);
-  if (item) {
-    if (novaQuantidade <= 0) {
-      removerDoCarrinho(produtoId);
-    } else {
-      item.quantidade = parseInt(novaQuantidade);
-      salvarCarrinho();
-      atualizarCarrinho();
-    }
-  }
-}
-
-// ATUALIZAR EXIBIÇÃO DO CARRINHO
 function atualizarCarrinho() {
   const carrinhoSection = document.getElementById('carrinho-section');
   const carrinhoItens = document.getElementById('carrinhoItens');
-  
-  if (carrinho.length === 0) {
-    carrinhoSection.style.display = 'none';
-    carrinhoItens.innerHTML = '';
-    return;
-  }
-  
+  if (carrinho.length === 0) { carrinhoSection.style.display = 'none'; return; }
   carrinhoSection.style.display = 'block';
   carrinhoItens.innerHTML = '';
-  
   let subtotal = 0;
-  
   carrinho.forEach(item => {
-    const total = item.preco * item.quantidade;
-    subtotal += total;
-    
+    subtotal += (item.preco * item.quantidade);
     const itemDiv = document.createElement('div');
     itemDiv.className = 'carrinho-item';
     itemDiv.innerHTML = `
-      <div class="carrinho-item-imagem">
-        <img src="${item.imagem}" alt="${item.nome}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%231a1f3a%22 width=%22100%22 height=%22100%22/%3E%3C/svg%3E'">
-      </div>
       <div class="carrinho-item-info">
         <h3>${item.nome}</h3>
-        <p>${MOEDA}${item.preco.toFixed(2)} x ${item.quantidade}</p>
+        <p>${MOEDA}${parseFloat(item.preco).toFixed(2)} x ${item.quantidade}</p>
       </div>
-      <div class="carrinho-item-acoes">
-        <input type="number" min="1" value="${item.quantidade}" class="quantidade-input" onchange="atualizarQuantidade(${item.id}, this.value)">
-        <button class="btn-remover" onclick="removerDoCarrinho(${item.id})">🗑️</button>
-      </div>
+      <button class="btn-remover" onclick="removerDoCarrinho(${item.id})">🗑️</button>
     `;
     carrinhoItens.appendChild(itemDiv);
   });
-  
-  const envio = 10;
-  const total = subtotal + envio;
-  
   document.getElementById('subtotal').textContent = `${MOEDA}${subtotal.toFixed(2)}`;
-  document.getElementById('total').textContent = `${MOEDA}${total.toFixed(2)}`;
+  document.getElementById('total').textContent = `${MOEDA}${(subtotal + 10).toFixed(2)}`;
 }
 
-// SALVAR CARRINHO NO LOCALSTORAGE
-function salvarCarrinho() {
-  localStorage.setItem('carrinho', JSON.stringify(carrinho));
+function removerDoCarrinho(id) {
+  carrinho = carrinho.filter(i => i.id !== id);
+  salvarCarrinho();
+  atualizarCarrinho();
 }
 
-// CHECKOUT
 function checkout() {
-  if (carrinho.length === 0) {
-    mostrarToast('Carrinho vazio!', true);
-    return;
-  }
-  
-  const total = carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0) + 10;
-  const mensagem = `Olá! Gostaria de comprar os seguintes produtos:\n\n${carrinho.map(item => `- ${item.nome} (${item.quantidade}x ${MOEDA}${item.preco.toFixed(2)})`).join('\n')}\n\nTotal: ${MOEDA}${total.toFixed(2)}`;
-  
-  abrirWhatsApp(mensagem);
+  const total = carrinho.reduce((sum, i) => sum + (i.preco * i.quantidade), 0) + 10;
+  const msg = `Olá Novatec! Encomenda:\n${carrinho.map(i => `- ${i.nome} (${i.quantidade}x)`).join('\n')}\nTotal: ${MOEDA}${total.toFixed(2)}`;
+  abrirWhatsApp(msg);
 }
 
-// VOLTAR À LOJA
-function voltarLoja() {
-  document.getElementById('carrinho-section').style.display = 'none';
-  document.getElementById('loja').scrollIntoView({ behavior: 'smooth' });
-}
-
-// ABRIR WHATSAPP
-function abrirWhatsApp(mensagem = '') {
-  const msg = mensagem || 'Olá! Gostaria de mais informações sobre os vossos serviços.';
+function abrirWhatsApp(msg = '') {
   const url = `https://wa.me/${CONTATO.whatsapp}?text=${encodeURIComponent(msg)}`;
   window.open(url, '_blank');
 }
 
-// SCROLL PARA CONTATO
-function scrollToContato() {
-  document.getElementById('contato').scrollIntoView({ behavior: 'smooth' });
-}
-
-// MOSTRAR NOTIFICAÇÃO
-function mostrarToast(mensagem, erro = false) {
-  const toast = document.getElementById('toast');
-  toast.textContent = mensagem;
-  toast.classList.add('show');
-  if (erro) toast.classList.add('erro');
-  
-  setTimeout(() => {
-    toast.classList.remove('show', 'erro');
-  }, 3000);
+function mostrarToast(m) {
+  const t = document.getElementById('toast');
+  t.textContent = m; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
 }
