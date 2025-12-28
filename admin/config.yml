@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: O-TEU-UTILIZADOR/novatec-site
+  repo: AntonioNovatec/novatec-site
   branch: main
 
 media_folder: "assets"
@@ -15,4 +15,5 @@ collections:
     fields:
       - {label: "Nome do Produto", name: "title", widget: "string"}
       - {label: "Preço", name: "price", widget: "string"}
+
       - {label: "Descrição", name: "body", widget: "markdown"}
