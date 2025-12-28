@@ -1,17 +1,18 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: O-TEU-UTILIZADOR/novatec-site
   branch: main
 
-media_folder: "img"
-public_folder: "/img"
+media_folder: "assets"
+public_folder: "assets"
 
 collections:
-  - name: "precos"
-    label: "Tabela de Preços"
-    folder: "content/precos"
-    create: true
-    slug: "{{title}}"
+  - name: "produtos"
+    label: "Produtos e Preços"
+    folder: "/"
+    extension: "html"
+    format: "frontmatter"
     fields:
-      - {label: "Nome do Serviço", name: "title", widget: "string"}
-      - {label: "Preço (Ex: 35€)", name: "valor", widget: "string"}
-      - {label: "Descrição Curta", name: "body", widget: "markdown"}
+      - {label: "Nome do Produto", name: "title", widget: "string"}
+      - {label: "Preço", name: "price", widget: "string"}
+      - {label: "Descrição", name: "body", widget: "markdown"}
