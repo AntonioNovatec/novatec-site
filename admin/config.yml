@@ -3,6 +3,8 @@ backend:
   repo: AntonioNovatec/novatec-site
   branch: main
   auth_type: pkce
+  base_url: https://novatec-site.pages.dev
+  site_domain: novatec-site.pages.dev
 media_folder: "assets"
 public_folder: "assets"
 
@@ -17,5 +19,6 @@ collections:
       - {label: "Preço", name: "price", widget: "string"}
 
       - {label: "Descrição", name: "body", widget: "markdown"}
+
 
 
