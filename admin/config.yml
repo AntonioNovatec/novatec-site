@@ -5,20 +5,25 @@ backend:
   auth_type: pkce
   base_url: https://novatec-site.pages.dev
   site_domain: novatec-site.pages.dev
-media_folder: "assets"
-public_folder: "assets"
+
+media_folder: "assets/images"
+public_folder: "assets/images"
 
 collections:
   - name: "produtos"
-    label: "Produtos e Preços"
-    folder: "/"
-    extension: "html"
-    format: "frontmatter"
+    label: "Loja de Componentes"
+    folder: "data/produtos"
+    create: true
+    slug: "{{slug}}"
+    extension: "json"
+    format: "json"
     fields:
-      - {label: "Nome do Produto", name: "title", widget: "string"}
-      - {label: "Preço", name: "price", widget: "string"}
-
-      - {label: "Descrição", name: "body", widget: "markdown"}
+      - {label: "ID (Número único)", name: "id", widget: "number", value_type: "int"}
+      - {label: "Nome do Produto", name: "nome", widget: "string"}
+      - {label: "Preço", name: "preco", widget: "number", value_type: "float"}
+      - {label: "Categoria", name: "categoria", widget: "select", options: ["gpu", "cpu", "ram", "ssd"]}
+      - {label: "Imagem", name: "imagem", widget: "image"}
+      - {label: "Descrição", name: "descricao", widget: "text"}
 
 
 
