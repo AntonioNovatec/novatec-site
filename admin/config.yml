@@ -2,7 +2,7 @@ backend:
   name: github
   repo: AntonioNovatec/novatec-site
   branch: main
-
+base_url: https://novatec-site.pages.dev
 media_folder: "assets"
 public_folder: "assets"
 
@@ -17,3 +17,4 @@ collections:
       - {label: "Preço", name: "price", widget: "string"}
 
       - {label: "Descrição", name: "body", widget: "markdown"}
+
